@@ -1,6 +1,6 @@
 // Implement a node app called fetcher.js.
 
-const { timeStamp } = require("console");
+//const { timeStamp } = require("console");
 
 // It should take two command line arguments:
 // a URL
@@ -18,23 +18,34 @@ const { timeStamp } = require("console");
 // Do not use the pipe function
 // Do not use synchronous functions (see warning above)
 
+//input: URL
+//input: file path
+
+// output: should download stuff to a file
+//output: "Downloaded and saved 1235 bytes to ./index.html."
+
+
+
+
 const needle = require('needle');
 const fs = require('node:fs');
+let commandLineInput = process.argv.slice(2);
 
-needle.get('example.edu', (error, response, body) => {
+
+needle.get(commandLineInput[0], (error, response, body) => {
+  if ()
+ 
+ 
+ 
+ 
   console.log('error:', error); // Print the error if one occurred
   console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-  console.log('body:', body); // Print the HTML for the Google homepage.
-});
-
-
-//all the stuff below her write to a file
-const content = 'Some content!';
-
-fs.writeFile('/Users/joe/test.txt', content, err => {
-  if (err) {
-    console.error(err);
-  } else {
-    // file written successfully
-  }
+  fs.writeFile(commandLineInput[1], (body), err => {
+    if (err) {
+      console.error(err);
+    } else {
+      console.log(`Downloaded and saved ${Buffer.byteLength(body)} bytes to ${commandLineInput[1]}`)
+      // file written successfully
+    }
+  });
 });
