@@ -1,51 +1,28 @@
-// Implement a node app called fetcher.js.
+const needle = require('needle'); //calls library
+const fs = require('node:fs'); //need this to write files
 
-//const { timeStamp } = require("console");
-
-// It should take two command line arguments:
-// a URL
-// a local file path
-// 
-// You need to make an http request and wait for the response.
-// After the http request is complete, you need to take the data you receive and write it to a file in your local filesystem.
-//
-//1 char === 1 byte
-
-//TIPS
-// Install and use the needle library to make the HTTP request
-// Use Node's fs (file system) module to write the file
-// Use the callback based approach we've been learning so far
-// Do not use the pipe function
-// Do not use synchronous functions (see warning above)
-
-//input: URL
-//input: file path
-
-// output: should download stuff to a file
-//output: "Downloaded and saved 1235 bytes to ./index.html."
-
-
-
-
-const needle = require('needle');
-const fs = require('node:fs');
-let commandLineInput = process.argv.slice(2);
+let commandLineInput = process.argv.slice(2); //takes command line arguments
 
 
 needle.get(commandLineInput[0], (error, response, body) => {
-  if ()
- 
- 
- 
- 
-  console.log('error:', error); // Print the error if one occurred
-  console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-  fs.writeFile(commandLineInput[1], (body), err => {
-    if (err) {
-      console.error(err);
-    } else {
-      console.log(`Downloaded and saved ${Buffer.byteLength(body)} bytes to ${commandLineInput[1]}`)
-      // file written successfully
-    }
-  });
+  if (error) { //error handling i honestly dont understand
+    console.error('Error:', error);
+    return;
+  }
+  if (response && response.statusCode === 200) {//if connection is good, no error or 404
+
+    fs.writeFile(commandLineInput[1], body, err => { //async file write, needle get is other async component
+
+      if (err) { //if error writing file (path or whatever...)
+        console.error(err);
+        return;
+      }
+
+      console.log(`Downloaded and saved ${Buffer.byteLength(body)} bytes to ${commandLineInput[1]}.`); //this log just outputs something so we know out function actually did something, also computes size of the file (body)
+    });
+
+  } else {
+    console.error(`Failed to retrieve: ${response && response.statusCode}`);
+  }
+
 });
